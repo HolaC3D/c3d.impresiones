@@ -1,0 +1,62 @@
+{
+  "name": "Product",
+  "type": "object",
+  "properties": {
+    "nombre": {
+      "type": "string",
+      "description": "Nombre del producto"
+    },
+    "descripcion": {
+      "type": "string",
+      "description": "Descripci\u00f3n completa del producto"
+    },
+    "descripcion_corta": {
+      "type": "string",
+      "description": "Descripci\u00f3n corta para la tarjeta"
+    },
+    "precio": {
+      "type": "number",
+      "description": "Precio del producto"
+    },
+    "categoria": {
+      "type": "string",
+      "enum": [
+        "Cuadernos personalizados",
+        "Llaveros Cutie",
+        "Decoraci\u00f3n",
+        "Accesorios",
+        "Impresiones personalizadas"
+      ],
+      "description": "Categor\u00eda del producto"
+    },
+    "imagen_principal": {
+      "type": "string",
+      "description": "URL de la imagen principal"
+    },
+    "galeria": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "URLs de im\u00e1genes de la galer\u00eda"
+    },
+    "colores_disponibles": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Colores disponibles para el producto"
+    },
+    "destacado": {
+      "type": "boolean",
+      "default": false,
+      "description": "Si el producto est\u00e1 destacado"
+    }
+  },
+  "required": [
+    "nombre",
+    "precio",
+    "categoria",
+    "imagen_principal"
+  ]
+}

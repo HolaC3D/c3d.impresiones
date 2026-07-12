@@ -1,0 +1,13 @@
+{
+  "name": "Category",
+  "type": "object",
+  "properties": {
+    "nombre": {
+      "type": "string",
+      "description": "Nombre de la categor\u00eda"
+    }
+  },
+  "required": [
+    "nombre"
+  ]
+}
