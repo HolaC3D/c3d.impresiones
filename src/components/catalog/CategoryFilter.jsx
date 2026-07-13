@@ -1,19 +1,12 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { motion } from "framer-motion";
 
-const CATEGORIES = [
-  "Todos",
-  "Cuadernos personalizados",
-  "Llaveros Cutie",
-  "Decoración",
-  "Accesorios",
-  "Impresiones personalizadas",
-];
+export default function CategoryFilter({ active, onChange, categories = [] }) {
+  const categoryList = useMemo(() => ["Todos", ...(categories || [])], [categories]);
 
-export default function CategoryFilter({ active, onChange }) {
   return (
     <div className="flex flex-wrap gap-2 justify-center">
-      {CATEGORIES.map((cat) => {
+      {categoryList.map((cat) => {
         const isActive = active === cat || (cat === "Todos" && !active);
         return (
           <button

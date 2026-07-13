@@ -8,14 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { X, Plus, Upload, Loader2 } from "lucide-react";
-
-const DEFAULT_CATEGORIES = [
-  "Cuadernos personalizados",
-  "Llaveros Cutie",
-  "Decoración",
-  "Accesorios",
-  "Impresiones personalizadas",
-];
+import { DEFAULT_CATEGORIES, uniqueCategories } from "@/lib/defaultCategories";
 
 export default function ProductForm({ product, onSave, onCancel }) {
   const [form, setForm] = useState({
@@ -44,7 +37,7 @@ export default function ProductForm({ product, onSave, onCancel }) {
       .map((c) => c?.nombre)
       .filter(Boolean);
 
-    return dbCategories.length > 0 ? dbCategories : DEFAULT_CATEGORIES;
+    return uniqueCategories([...DEFAULT_CATEGORIES, ...dbCategories]);
   }, [categoriesData]);
 
   const handleUpload = async (e, field) => {

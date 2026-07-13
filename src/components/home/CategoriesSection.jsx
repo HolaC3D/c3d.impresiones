@@ -1,17 +1,38 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { BookOpen, KeyRound, Home, Puzzle, Sparkles } from "lucide-react";
+import { base44 } from "@/api/base44Client";
+import { useQuery } from "@tanstack/react-query";
+import { DEFAULT_CATEGORIES, DEFAULT_CATEGORY_STYLES, uniqueCategories } from "@/lib/defaultCategories";
 
-const categories = [
-  { nombre: "Cuadernos personalizados", icon: BookOpen, color: "#F7D6E0" },
-  { nombre: "Llaveros Cutie", icon: KeyRound, color: "#A8D8EA" },
-  { nombre: "Decoración", icon: Home, color: "#DCEDC1" },
-  { nombre: "Accesorios", icon: Puzzle, color: "#FFD3B6" },
-  { nombre: "Impresiones personalizadas", icon: Sparkles, color: "#7CB9E8" },
-];
+const ICONS = {
+  BookOpen,
+  KeyRound,
+  Home,
+  Puzzle,
+  Sparkles,
+};
 
 export default function CategoriesSection() {
+  const { data: categoriesData = [] } = useQuery({
+    queryKey: ["home-categories"],
+    queryFn: () => base44.entities.Category.list("-created_date"),
+    initialData: [],
+  });
+
+  const categories = useMemo(() => {
+    const dbCategories = (categoriesData || []).map((c) => c?.nombre).filter(Boolean);
+    const names = uniqueCategories([...DEFAULT_CATEGORIES, ...dbCategories]);
+
+    return names.map((nombre) => {
+      const style = DEFAULT_CATEGORY_STYLES[nombre];
+      const Icon = style ? ICONS[style.icon] : Sparkles;
+      const color = style?.color || "#7CB9E8";
+      return { nombre, icon: Icon, color };
+    });
+  }, [categoriesData]);
+
   return (
     <section className="py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -46,7 +67,7 @@ export default function CategoriesSection() {
                 >
                   <div
                     className="w-14 h-14 rounded-2xl flex items-center justify-center transition-transform group-hover:scale-110"
-                    style={{ backgroundColor: cat.color + "40" }}
+                    style={{ backgroundColor: `${cat.color}40` }}
                   >
                     <Icon className="w-6 h-6" style={{ color: "#3D405B" }} />
                   </div>

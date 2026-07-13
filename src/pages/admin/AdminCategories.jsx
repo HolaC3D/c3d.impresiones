@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash2, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { DEFAULT_CATEGORIES, uniqueCategories } from "@/lib/defaultCategories";
 
 export default function AdminCategories() {
   const [newName, setNewName] = useState("");
@@ -16,8 +17,28 @@ export default function AdminCategories() {
     initialData: [],
   });
 
+  const existingNames = useMemo(
+    () => new Set((categories || []).map((c) => c?.nombre?.trim()).filter(Boolean)),
+    [categories]
+  );
+
+  useEffect(() => {
+    if (isLoading) return;
+    const missing = uniqueCategories(DEFAULT_CATEGORIES).filter((name) => !existingNames.has(name));
+    if (missing.length === 0) return;
+
+    (async () => {
+      try {
+        await Promise.all(missing.map((nombre) => base44.entities.Category.create({ nombre })));
+        queryClient.invalidateQueries({ queryKey: ["admin-categories"] });
+      } catch (e) {
+        console.error("No se pudieron sembrar categorías por defecto", e);
+      }
+    })();
+  }, [isLoading, existingNames, queryClient]);
+
   const createMut = useMutation({
-    mutationFn: (data) => base44.entities.Category.create(data),
+    mutationFn: ({ nombre }) => base44.entities.Category.create({ nombre }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-categories"] });
       setNewName("");

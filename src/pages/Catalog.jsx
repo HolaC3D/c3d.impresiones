@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import CategoryFilter from "@/components/catalog/CategoryFilter";
 import ProductCard from "@/components/catalog/ProductCard";
 import ProductSkeleton from "@/components/catalog/ProductSkeleton";
+import { DEFAULT_CATEGORIES, uniqueCategories } from "@/lib/defaultCategories";
 
 export default function Catalog() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -20,6 +21,11 @@ export default function Catalog() {
     queryFn: () => base44.entities.Product.list("-created_date"),
     initialData: [],
   });
+
+  const categories = useMemo(() => {
+    const productCategories = (products || []).map((p) => p?.categoria).filter(Boolean);
+    return uniqueCategories([...DEFAULT_CATEGORIES, ...productCategories]);
+  }, [products]);
 
   const filtered = useMemo(() => {
     return products.filter((p) => {
@@ -67,7 +73,7 @@ export default function Catalog() {
 
         {/* Filters */}
         <div className="mb-10">
-          <CategoryFilter active={activeCategory} onChange={setActiveCategory} />
+          <CategoryFilter active={activeCategory} onChange={setActiveCategory} categories={categories} />
         </div>
 
         {/* Products Grid */}

@@ -1,8 +1,9 @@
-# TODO - Migración Base44 -> Supabase (sin cambiar UX)
+# TODO - Unificar categorías Admin/Home/Catálogo
 
-- [ ] Crear cliente Supabase compartido (`src/lib/supabaseClient.js`)
-- [ ] Reemplazar implementación de `src/api/base44Client.js` con adaptador compatible usando Supabase
-- [ ] Actualizar `src/lib/AuthContext.jsx` para remover dependencia de `@base44/sdk/dist/utils/axios-client`
-- [ ] Probar flujo auth (login/register/reset/admin login/logout)
-- [ ] Probar CRUD categorías/productos + stats
-- [ ] Probar rutas públicas (home/catalog/detail) y estados de error
+- [x] Revisar implementación actual de categorías en Home, Catálogo y Admin.
+- [x] Identificar fuente de datos actual (hardcode vs backend) y puntos de divergencia.
+- [x] Diseñar unificación de fuente de verdad para categorías.
+- [ ] Implementar sincronización: categorías creadas en Admin visibles en Home/Catálogo.
+- [ ] Incluir categorías predeterminadas en Admin para clasificar productos.
+- [ ] Ajustar formulario de productos para usar categorías unificadas.
+- [ ] Validar flujo crítico completo.
